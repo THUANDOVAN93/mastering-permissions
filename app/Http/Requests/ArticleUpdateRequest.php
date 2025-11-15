@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleUpdateRequest extends FormRequest
 {
@@ -11,7 +13,9 @@ class ArticleUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $article = $this->route('article');
+
+        return Gate::allows('manage-articles', $article);
     }
 
     /**
