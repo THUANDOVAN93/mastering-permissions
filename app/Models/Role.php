@@ -12,6 +12,7 @@ class Role extends Model
 
     protected $fillable = [
         'name',
+        'auth_code',
     ];
 
     public function users(): BelongsToMany

@@ -26,7 +26,7 @@
                                     class="mt-1 block w-full focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm "
                                     multiple>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                    <option value="{{ $role->id }}" {{ $user->hasRole($role->auth_code) ? 'selected' : '' }}>
                                         {{ $role->name }}
                                     </option>
                                 @endforeach
