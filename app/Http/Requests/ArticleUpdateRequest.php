@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Article;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +15,12 @@ class ArticleUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $article = $this->route('article');
+
+//        $response = Gate::inspect('update', $article);
+//        if ($response->allowed()) {
+//            return true;
+//        }
+//        throw new AuthorizationException();
 
         return Gate::allows('update', $article);
     }

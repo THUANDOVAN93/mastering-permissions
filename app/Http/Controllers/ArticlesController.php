@@ -6,6 +6,8 @@ use App\Http\Requests\ArticleCreateRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ArticlesController extends Controller
 {
@@ -15,7 +17,7 @@ class ArticlesController extends Controller
     public function index()
     {
         return view('articles.index', [
-            'articles' => Article::all(),
+            'articles' => Article::visibleTo(Auth::user())->get(),
         ]);
     }
 
@@ -24,6 +26,7 @@ class ArticlesController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Article::class);
         return view('articles.create');
     }
 
@@ -44,6 +47,11 @@ class ArticlesController extends Controller
      */
     public function edit(Article $article)
     {
+        Gate::authorize('update', $article);
+//        if (Gate::denies('update', $article)) {
+//            abort(403);
+//        }
+
         return view('articles.edit', [
             'article' => $article
         ]);
@@ -64,6 +72,8 @@ class ArticlesController extends Controller
      */
     public function destroy(Article $article)
     {
+        Gate::authorize('delete', $article);
+
         $article->delete();
 
         return redirect()->route('articles.index');
