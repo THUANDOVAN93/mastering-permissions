@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticlePolicy
 {
+    public function manageArticles(User $user): bool
+    {
+        return $user->hasAnyRoles(['admin', 'author', 'editor']);
+    }
+
     /**
      * Determine whether the user can view any models.
      */

@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
 //                || ($user->hasRole('author') && $user->id === $article->author_id);
 //        });
 
+        Gate::define('manage-users', function (User $user) {
+            return $user->hasRole('admin');
+        });
+
         Blade::directive('role', function ($expression) {
             return "<?php if (Auth::user()->hasAnyRoles([$expression])): ?>";
         });
