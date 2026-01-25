@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 //        });
 
         Gate::define('manage-users', function (User $user) {
-            return $user->hasAnPermission(['user:create', 'permission:create']);
+            return $user->hasAnyPermission(['user:create', 'permission:create']);
         });
 
         Blade::directive('role', function ($expression) {

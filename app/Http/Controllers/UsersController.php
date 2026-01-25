@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class UsersController extends Controller
     {
         return view('users.edit', [
             'user' => $user,
-            'roles' => Role::all(),
+            'groups' => Group::all(),
         ]);
     }
 
