@@ -80,6 +80,16 @@ class User extends Authenticatable
         return $this->getAllPermissions()->intersect($pers)->isNotEmpty();
     }
 
+    public function wrote(Article $article) : bool
+    {
+        return $this->id === $article->author_id;
+    }
+
+    public function didNotWrite(Article $article) : bool
+    {
+        return $this->id !== $article->author_id;
+    }
+
     /**
      * Get the attributes that should be cast.
      *

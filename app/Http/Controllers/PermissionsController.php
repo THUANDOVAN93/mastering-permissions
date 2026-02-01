@@ -20,7 +20,7 @@ class PermissionsController extends Controller
      */
     public function create()
     {
-        //
+        return view('permissions.create');
     }
 
     /**
@@ -28,7 +28,9 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Permission::create($request->all());
+
+        return redirect()->route('permissions.index');
     }
 
     /**

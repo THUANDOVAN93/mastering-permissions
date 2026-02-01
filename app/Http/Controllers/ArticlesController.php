@@ -17,7 +17,8 @@ class ArticlesController extends Controller
     public function index()
     {
         return view('articles.index', [
-            'articles' => Article::visibleTo(Auth::user())->get(),
+            //'articles' => Article::visibleTo(Auth::user())->get(),
+            'articles' => Article::all(),
         ]);
     }
 

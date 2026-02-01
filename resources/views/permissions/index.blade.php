@@ -41,7 +41,7 @@
                                         </a>
                                         <form
                                             method="post"
-                                            action="{{ route('permissions.destroy', ['role' => $permission->id]) }}"
+                                            action="{{ route('permissions.destroy', ['permission' => $permission->id]) }}"
                                             onsubmit="return confirm('Are you sure you want to delete this permission?')"
                                         >
                                             @csrf

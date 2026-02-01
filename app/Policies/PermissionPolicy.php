@@ -53,7 +53,7 @@ class PermissionPolicy
      */
     public function restore(User $user, Permission $permission): bool
     {
-        return false;
+        return true;
     }
 
     /**
