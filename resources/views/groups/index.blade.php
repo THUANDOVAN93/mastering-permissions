@@ -24,7 +24,6 @@
                         <thead>
                         <tr>
                             <th class="text-start">Name</th>
-                            th
                         </tr>
                         </thead>
                         <tbody>

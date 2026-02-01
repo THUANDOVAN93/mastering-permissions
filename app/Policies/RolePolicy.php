@@ -29,11 +29,7 @@ class RolePolicy
      */
     public function create(User $user): Response
     {
-        if ($user->hasAnyRoles(['admin'])) {
-            return Response::allow();
-        }
-
-        return Response::deny();
+        return Response::allow();
     }
 
     /**
@@ -41,11 +37,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role): Response
     {
-        if ($user->hasAnyRoles(['admin'])) {
-            return Response::allow();
-        }
-
-        return Response::deny();
+        return Response::allow();
     }
 
     /**

@@ -24,6 +24,7 @@
                             <select name="permissions[]" id="permissions"
                                     class="mt-1 block w-full focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm "
                                     multiple>
+
                                 @foreach($permissions as $permission)
                                     <option value="{{ $permission->id }}" {{ $group->permissions->contains($permission) ? 'selected' : '' }}>
                                         {{ $permission->description }}

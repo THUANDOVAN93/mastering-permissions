@@ -20,10 +20,6 @@ class RoleAccessMiddleware
             return redirect()->route('login');
         }
 
-        if (!Auth::user()->hasAnyRoles($roles)) {
-            abort(403, "Unauthorized action.");
-        }
-
         return $next($request);
     }
 }

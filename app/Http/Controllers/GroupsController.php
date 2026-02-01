@@ -69,7 +69,7 @@ class GroupsController extends Controller
     public function update(Request $request, Group $group)
     {
         $group->update($request->all());
-        $group->permissions()->sync($request->input('permissions'), []);
+        $group->permissions()->sync($request->input('permissions', []));
 
         return redirect(route('groups.index'));
     }
