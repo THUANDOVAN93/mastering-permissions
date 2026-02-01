@@ -42,7 +42,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function articles() : HasMany {
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    public function articles() : HasMany
+    {
         return $this->hasMany(Article::class, 'author_id');
     }
 
