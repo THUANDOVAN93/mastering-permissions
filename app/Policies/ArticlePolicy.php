@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\ArticleAbilities;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -9,24 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ArticlePolicy
 {
-    public function manageArticles(User $user): bool
-    {
-//        return $user->hasAnyRoles(['admin', 'author', 'editor']);
-        return $user->hasAnyPermission([
-            'article:create',
-            'article:update',
-            'article:delete',
-            'article:update-any',
-            'article:delete-any'
-        ]);
-    }
-
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermission(['article:create', 'article:update-any', 'article:delete-any']);
+        return $user->hasAnyPermission([
+            ArticleAbilities::ARTICLE_CREATE,
+            ArticleAbilities::ARTICLE_UPDATE_ANY,
+            ArticleAbilities::ARTICLE_DELETE_ANY,
+        ]);
     }
 
     /**
@@ -42,11 +35,11 @@ class ArticlePolicy
      */
     public function create(User $user): Response
     {
-        if ($user->hasPermission('article:create:deny')) {
+        if ($user->hasPermission(ArticleAbilities::ARTICLE_CREATE_DENY)) {
             return Response::denyAsNotFound();
         }
 
-        return $user->hasPermission('article:create') ?
+        return $user->hasPermission(ArticleAbilities::ARTICLE_CREATE) ?
             Response::allow() :
             Response::denyAsNotFound();
     }
@@ -57,16 +50,16 @@ class ArticlePolicy
     public function update(User $user, Article $article): Response
     {
         if ($user->didNotWrite($article)) {
-            if ($user->hasPermission('article:update-any:deny')) {
+            if ($user->hasPermission(ArticleAbilities::ARTICLE_UPDATE_ANY_DENY)) {
                 return Response::denyAsNotFound();
             }
 
-            return $user->hasPermission('article:update-any') ?
+            return $user->hasPermission(ArticleAbilities::ARTICLE_UPDATE_ANY) ?
                 Response::allow() :
                 Response::denyAsNotFound();
         }
 
-        return $user->hasPermission('article:update') ?
+        return $user->hasPermission(ArticleAbilities::ARTICLE_UPDATE) ?
             Response::allow() :
             Response::denyAsNotFound();
 
@@ -78,16 +71,16 @@ class ArticlePolicy
     public function delete(User $user, Article $article): Response
     {
         if ($user->didNotWrite($article)) {
-            if ($user->hasPermission('article:delete-any:deny')) {
+            if ($user->hasPermission(ArticleAbilities::ARTICLE_DELETE_ANY_DENY)) {
                 return Response::denyAsNotFound();
             }
 
-            return $user->hasPermission('article:delete-any') ?
+            return $user->hasPermission(ArticleAbilities::ARTICLE_DELETE_ANY) ?
                 Response::allow() :
                 Response::denyAsNotFound();
         }
 
-        return $user->hasPermission('article:delete') ?
+        return $user->hasPermission(ArticleAbilities::ARTICLE_DELETE) ?
             Response::allow() :
             Response::denyAsNotFound();
     }

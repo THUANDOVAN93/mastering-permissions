@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\ArticleAbilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Context;
+use function PHPUnit\Framework\isInstanceOf;
 
 class User extends Authenticatable
 {
@@ -68,14 +70,24 @@ class User extends Authenticatable
         });
     }
 
-    public function hasPermission(string $permission) : bool
+    public function hasPermission($permission) : bool
     {
+        if ($permission instanceof ArticleAbilities) {
+            return $this->getAllPermissions()->contains($permission);
+        }
+
         return $this->getAllPermissions()->contains(strtolower($permission));
     }
 
     public function hasAnyPermission(array $permissions) : bool
     {
-        $pers = array_map('strtolower', $permissions);
+        $pers = array_map(function ($item) {
+            if ($item instanceof ArticleAbilities) {
+                return $item;
+            }
+
+            return strtolower($item);
+        }, $permissions);
 
         return $this->getAllPermissions()->intersect($pers)->isNotEmpty();
     }
