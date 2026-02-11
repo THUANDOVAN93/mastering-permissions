@@ -18,9 +18,8 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         $content = array_reduce(fake()->paragraphs(rand(2, 3)), function ($carry, $paragraph) {
-            return $carry . '<p>' . $paragraph . '</p>';
+            return $carry.'<p>'.$paragraph.'</p>';
         }, '');
-
 
         return [
             'author_id' => User::factory(),

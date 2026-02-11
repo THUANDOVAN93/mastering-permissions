@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\ArticleAbilities;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,9 +11,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Context;
-use function PHPUnit\Framework\isInstanceOf;
 
-class User extends Authenticatable
+/**
+ * @property array<int, string> $permissions
+ */
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -49,9 +51,19 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class);
     }
 
-    public function articles() : HasMany
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'author_id');
+    }
+
+    public function hasRole(string $authCode): bool
+    {
+        return $this->roles()->where('auth_code', $authCode)->exists();
     }
 
     public function getAllPermissions()
@@ -61,7 +73,7 @@ class User extends Authenticatable
         }
 
         $groupPermissions = $this->groups()->with('permissions')->get()
-                ->pluck('permissions')->flatten()->pluck('auth_code');
+            ->pluck('permissions')->flatten()->pluck('auth_code');
 
         $permissions = collect($this->permissions);
 
@@ -70,7 +82,7 @@ class User extends Authenticatable
         });
     }
 
-    public function hasPermission($permission) : bool
+    public function hasPermission($permission): bool
     {
         if ($permission instanceof ArticleAbilities) {
             return $this->getAllPermissions()->contains($permission);
@@ -79,7 +91,7 @@ class User extends Authenticatable
         return $this->getAllPermissions()->contains(strtolower($permission));
     }
 
-    public function hasAnyPermission(array $permissions) : bool
+    public function hasAnyPermission(array $permissions): bool
     {
         $pers = array_map(function ($item) {
             if ($item instanceof ArticleAbilities) {
@@ -92,12 +104,12 @@ class User extends Authenticatable
         return $this->getAllPermissions()->intersect($pers)->isNotEmpty();
     }
 
-    public function wrote(Article $article) : bool
+    public function wrote(Article $article): bool
     {
         return $this->id === $article->author_id;
     }
 
-    public function didNotWrite(Article $article) : bool
+    public function didNotWrite(Article $article): bool
     {
         return $this->id !== $article->author_id;
     }

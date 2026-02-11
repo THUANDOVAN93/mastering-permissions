@@ -4,11 +4,9 @@ namespace App\Http\Requests;
 
 use App\Models\Article;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 
 class ArticleCreateRequest extends FormRequest
 {
@@ -23,7 +21,7 @@ class ArticleCreateRequest extends FormRequest
             return true;
         }
 
-        throw new ModelNotFoundException();
+        throw new ModelNotFoundException;
     }
 
     /**
@@ -35,7 +33,7 @@ class ArticleCreateRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'content' => ['required','string'],
+            'content' => ['required', 'string'],
         ];
     }
 }
